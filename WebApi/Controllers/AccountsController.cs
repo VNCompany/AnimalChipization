@@ -5,7 +5,7 @@ namespace WebApi.Controllers;
 
 public class AccountsController : ApiController
 {
-    public readonly ApplicationContext context;
+    private readonly ApplicationContext context;
     public AccountsController(ApplicationContext context)
     {
         this.context = context;
