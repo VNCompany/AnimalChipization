@@ -14,11 +14,12 @@ public class ApplicationContext : DbContext
     public ApplicationContext(string connectionString)
     {
         this.connectionString = connectionString;
+
         Database.EnsureCreated();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
+    { 
         optionsBuilder.UseMySql(connectionString, new MySqlServerVersion(new Version(10, 3, 22)));
         base.OnConfiguring(optionsBuilder);
     }
@@ -45,7 +46,7 @@ public class ApplicationContext : DbContext
                 Height = 95.7f,
                 Gender = "MALE",
                 LifeStatis = "ALIVE",
-                ChippingDateTime = DateTime.Now,
+                ChippingDateTime = DateTimeExtensions.ClearNow(),
                 ChipperId = 1,
                 ChippingLocationId = 1
             });

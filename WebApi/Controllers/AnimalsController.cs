@@ -25,4 +25,10 @@ public class AnimalsController : ApiController
         animal.VisitedLocations = new long[0];
         return Json(animal);
     }
+
+    [HttpGet("search")]
+    public DateTime SearchGet()
+    {
+        return DateTime.Now;
+    }
 }

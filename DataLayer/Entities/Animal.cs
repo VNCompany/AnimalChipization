@@ -8,6 +8,8 @@ public class Animal
     public float Height { get; set; }
     public string Gender { get; set; } = string.Empty;
     public string LifeStatis { get; set; } = string.Empty;
+
+    [System.Text.Json.Serialization.JsonConverter(typeof(DataConverters.CustomDateTimeConverter))]
     public DateTime? ChippingDateTime { get; set; }
     public int ChipperId { get; set; }
     public long ChippingLocationId { get; set; }
