@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace DataLayer.DataConverters;
+namespace WebApi.DataConverters;
 
-public class DateTimeNullableConverter : JsonConverter<DateTime?>
+public class NullableDateTimeConverter : JsonConverter<DateTime?>
 {
     public override DateTime? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
