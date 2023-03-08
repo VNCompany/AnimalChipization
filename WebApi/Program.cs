@@ -9,7 +9,7 @@ builder.Services.AddControllers().AddJsonOptions(
     });
 builder.Services.AddScoped(
     provider => new ApplicationContext(
-        "Server=127.0.0.1;User=root;Password=root;Database=animal_chipization"));
+        "Server=127.0.0.1;User=root;Password=root;Database=AnimalChipization"));
 
 var app = builder.Build();
 

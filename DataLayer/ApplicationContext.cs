@@ -11,12 +11,11 @@ public class ApplicationContext : DbContext
     public DbSet<LocationPoint> LocationPoints { get; set; }
     public DbSet<Animal> Animals { get; set; }
     public DbSet<AnimalType> AnimalTypes { get; set; }
+    public DbSet<AnimalsTypesLink> AnimalsTypesLinks { get; set; }
 
     public ApplicationContext(string connectionString)
     {
         this.connectionString = connectionString;
-
-        Database.EnsureCreated();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -30,6 +29,9 @@ public class ApplicationContext : DbContext
         // Настройки для модели Animal
         modelBuilder.Entity<Animal>().Ignore(prop => prop.AnimalTypes);
         modelBuilder.Entity<Animal>().Ignore(prop => prop.VisitedLocations);
+
+        // Настройки для модели AnimalsTypesLinks
+        modelBuilder.Entity<AnimalsTypesLink>().HasKey(key => new { key.AnimalId, key.AnimalTypeId });
 
         modelBuilder.Entity<Account>().HasData(
             new { Id = 1, FirstName = "Victor", LastName = "Neznanov", Email = "i@vneznanov.ru", Password = "99bde068af2d49ed7fc8b8fa79abe13a6059e0db320bb73459fd96624bb4b33f" },
@@ -55,6 +57,9 @@ public class ApplicationContext : DbContext
         modelBuilder.Entity<AnimalType>().HasData(
             new AnimalType { Id = 1, Type = "elephant" },
             new AnimalType { Id = 2, Type = "monkey" });
+
+        modelBuilder.Entity<AnimalsTypesLink>().HasData(
+            new AnimalsTypesLink() { AnimalId = 1, AnimalTypeId = 2L });
 
 
         base.OnModelCreating(modelBuilder);

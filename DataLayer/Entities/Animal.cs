@@ -10,7 +10,9 @@ public class Animal
     public string LifeStatis { get; set; } = string.Empty;
     public DateTime? ChippingDateTime { get; set; }
     public int ChipperId { get; set; }
+    public Account Chipper { get; set; } = null!;
     public long ChippingLocationId { get; set; }
+    public LocationPoint ChippingLocation { get; set; } = null!;
 
     public long[]? AnimalTypes { get; set; }
     public long[]? VisitedLocations { get; set; }

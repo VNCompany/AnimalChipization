@@ -21,7 +21,7 @@ public partial class AnimalsController : ApiController
         if (animal is null)
             return StatusCode(404);
 
-        animal.AnimalTypes = new long[0];
+        animal.AnimalTypes = context.AnimalsTypesLinks.Where(l => l.AnimalId == animal.Id).Select(lt => lt.AnimalTypeId).ToArray();
         animal.VisitedLocations = new long[0];
         return Json(animal);
     }
