@@ -4,8 +4,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddJsonOptions(
     options =>
     {
-        options.JsonSerializerOptions.Converters.Add(new WebApi.DataConverters.DateTimeConverter());
-        options.JsonSerializerOptions.Converters.Add(new WebApi.DataConverters.NullableDateTimeConverter());
+        options.JsonSerializerOptions.Converters.Add(new WebApi.Converters.DateTimeConverter());
+        options.JsonSerializerOptions.Converters.Add(new WebApi.Converters.NullableDateTimeConverter());
     });
 builder.Services.AddScoped(
     provider => new ApplicationContext(

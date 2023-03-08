@@ -10,6 +10,7 @@ public class ApplicationContext : DbContext
     public DbSet<Account> Accounts { get; set; }
     public DbSet<LocationPoint> LocationPoints { get; set; }
     public DbSet<Animal> Animals { get; set; }
+    public DbSet<AnimalType> AnimalTypes { get; set; }
 
     public ApplicationContext(string connectionString)
     {
@@ -50,6 +51,10 @@ public class ApplicationContext : DbContext
                 ChipperId = 1,
                 ChippingLocationId = 1
             });
+
+        modelBuilder.Entity<AnimalType>().HasData(
+            new AnimalType { Id = 1, Type = "elephant" },
+            new AnimalType { Id = 2, Type = "monkey" });
 
 
         base.OnModelCreating(modelBuilder);

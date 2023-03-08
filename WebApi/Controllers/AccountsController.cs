@@ -15,7 +15,7 @@ public class AccountsController : ApiController
     [HttpGet("{id?}")]
     public IActionResult Get(int? id)
     {
-        if (id == null || id < 0)
+        if (id == null || id <= 0)
             return StatusCode(400);
 
         Account? account = context.Accounts.FirstOrDefault(account => account.Id == id);
