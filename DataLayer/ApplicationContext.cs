@@ -12,6 +12,7 @@ public class ApplicationContext : DbContext
     public DbSet<Animal> Animals { get; set; }
     public DbSet<AnimalType> AnimalTypes { get; set; }
     public DbSet<AnimalsTypesLink> AnimalsTypesLinks { get; set; }
+    public DbSet<VisitedLocation> VisitedLocations { get; set; }
 
     public ApplicationContext(string connectionString)
     {
@@ -38,7 +39,8 @@ public class ApplicationContext : DbContext
             new { Id = 2, FirstName = "Anton", LastName = "Belousov", Email = "i@vneznanov.ru", Password = "1f29f2d29f02f2608eb72d45625ba3a851eda1ee2be1bda22427a584b787c722" });
 
         modelBuilder.Entity<LocationPoint>().HasData(
-            new { Id = 1L, Latitude = 56.195, Longitude = 23.1212 });
+            new { Id = 1L, Latitude = 56.195, Longitude = 23.1212 },
+            new { Id = 2L, Latitude = 55.1124, Longitude = 134.5673 });
 
         modelBuilder.Entity<Animal>().HasData(
             new Animal()
@@ -49,7 +51,7 @@ public class ApplicationContext : DbContext
                 Height = 95.7f,
                 Gender = "MALE",
                 LifeStatis = "ALIVE",
-                ChippingDateTime = DateTimeExtensions.ClearNow(),
+                ChippingDateTime = new DateTime(2022, 7, 13, 12, 23, 54),
                 ChipperId = 1,
                 ChippingLocationId = 1
             });
@@ -60,6 +62,14 @@ public class ApplicationContext : DbContext
 
         modelBuilder.Entity<AnimalsTypesLink>().HasData(
             new AnimalsTypesLink() { AnimalId = 1, AnimalTypeId = 2L });
+
+        modelBuilder.Entity<VisitedLocation>().HasData(
+            new VisitedLocation { 
+                Id = 1L, 
+                DateTimeOfVisitLocationPoint = new DateTime(2023, 2, 14, 13, 59, 33, DateTimeKind.Local),
+                AnimalId = 1L,
+                LocationPointId = 1L
+            });
 
 
         base.OnModelCreating(modelBuilder);

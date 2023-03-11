@@ -109,7 +109,7 @@ namespace DataLayer.Migrations
                         {
                             Id = 1L,
                             ChipperId = 1,
-                            ChippingDateTime = new DateTime(2023, 3, 8, 23, 15, 5, 0, DateTimeKind.Local),
+                            ChippingDateTime = new DateTime(2022, 7, 13, 12, 23, 54, 0, DateTimeKind.Unspecified),
                             ChippingLocationId = 1L,
                             Gender = "MALE",
                             Height = 95.7f,
@@ -190,6 +190,45 @@ namespace DataLayer.Migrations
                             Id = 1L,
                             Latitude = 56.195,
                             Longitude = 23.121200000000002
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Latitude = 55.112400000000001,
+                            Longitude = 134.56729999999999
+                        });
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.VisitedLocation", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("AnimalId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("DateTimeOfVisitLocationPoint")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<long>("LocationPointId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnimalId");
+
+                    b.HasIndex("LocationPointId");
+
+                    b.ToTable("VisitedLocations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            AnimalId = 1L,
+                            DateTimeOfVisitLocationPoint = new DateTime(2023, 2, 14, 13, 59, 33, 0, DateTimeKind.Local),
+                            LocationPointId = 1L
                         });
                 });
 
@@ -229,6 +268,25 @@ namespace DataLayer.Migrations
                     b.Navigation("Animal");
 
                     b.Navigation("AnimalType");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.VisitedLocation", b =>
+                {
+                    b.HasOne("DataLayer.Entities.Animal", "Animal")
+                        .WithMany()
+                        .HasForeignKey("AnimalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataLayer.Entities.LocationPoint", "LocationPoint")
+                        .WithMany()
+                        .HasForeignKey("LocationPointId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Animal");
+
+                    b.Navigation("LocationPoint");
                 });
 #pragma warning restore 612, 618
         }

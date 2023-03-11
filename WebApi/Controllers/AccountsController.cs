@@ -19,10 +19,10 @@ public class AccountsController : ApiController
             return StatusCode(400);
 
         Account? account = context.Accounts.FirstOrDefault(account => account.Id == id);
-        if (account is null)
+        if (account != null)
+            return Json(account);
+        else
             return StatusCode(404);
-
-        return Json(account);
     }
 
     // Поиск аккаунтов пользователей по параметрам

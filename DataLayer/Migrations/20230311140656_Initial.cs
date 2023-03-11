@@ -128,6 +128,34 @@ namespace DataLayer.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "VisitedLocations",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    DateTimeOfVisitLocationPoint = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    LocationPointId = table.Column<long>(type: "bigint", nullable: false),
+                    AnimalId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VisitedLocations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_VisitedLocations_Animals_AnimalId",
+                        column: x => x.AnimalId,
+                        principalTable: "Animals",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_VisitedLocations_LocationPoints_LocationPointId",
+                        column: x => x.LocationPointId,
+                        principalTable: "LocationPoints",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.InsertData(
                 table: "Accounts",
                 columns: new[] { "Id", "Email", "FirstName", "LastName", "Password" },
@@ -149,17 +177,26 @@ namespace DataLayer.Migrations
             migrationBuilder.InsertData(
                 table: "LocationPoints",
                 columns: new[] { "Id", "Latitude", "Longitude" },
-                values: new object[] { 1L, 56.195, 23.121200000000002 });
+                values: new object[,]
+                {
+                    { 1L, 56.195, 23.121200000000002 },
+                    { 2L, 55.112400000000001, 134.56729999999999 }
+                });
 
             migrationBuilder.InsertData(
                 table: "Animals",
                 columns: new[] { "Id", "ChipperId", "ChippingDateTime", "ChippingLocationId", "Gender", "Height", "Length", "LifeStatis", "Weight" },
-                values: new object[] { 1L, 1, new DateTime(2023, 3, 8, 23, 15, 5, 0, DateTimeKind.Local), 1L, "MALE", 95.7f, 185.5f, "ALIVE", 200.2f });
+                values: new object[] { 1L, 1, new DateTime(2022, 7, 13, 12, 23, 54, 0, DateTimeKind.Unspecified), 1L, "MALE", 95.7f, 185.5f, "ALIVE", 200.2f });
 
             migrationBuilder.InsertData(
                 table: "AnimalsTypesLinks",
                 columns: new[] { "AnimalId", "AnimalTypeId" },
                 values: new object[] { 1L, 2L });
+
+            migrationBuilder.InsertData(
+                table: "VisitedLocations",
+                columns: new[] { "Id", "AnimalId", "DateTimeOfVisitLocationPoint", "LocationPointId" },
+                values: new object[] { 1L, 1L, new DateTime(2023, 2, 14, 13, 59, 33, 0, DateTimeKind.Local), 1L });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Animals_ChipperId",
@@ -175,6 +212,16 @@ namespace DataLayer.Migrations
                 name: "IX_AnimalsTypesLinks_AnimalTypeId",
                 table: "AnimalsTypesLinks",
                 column: "AnimalTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VisitedLocations_AnimalId",
+                table: "VisitedLocations",
+                column: "AnimalId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VisitedLocations_LocationPointId",
+                table: "VisitedLocations",
+                column: "LocationPointId");
         }
 
         /// <inheritdoc />
@@ -182,6 +229,9 @@ namespace DataLayer.Migrations
         {
             migrationBuilder.DropTable(
                 name: "AnimalsTypesLinks");
+
+            migrationBuilder.DropTable(
+                name: "VisitedLocations");
 
             migrationBuilder.DropTable(
                 name: "AnimalTypes");

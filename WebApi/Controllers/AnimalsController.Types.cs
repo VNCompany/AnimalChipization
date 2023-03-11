@@ -11,9 +11,9 @@ public partial class AnimalsController  /* Types */
             return StatusCode(400);
 
         AnimalType? animalType = context.AnimalTypes.FirstOrDefault(at => at.Id == id);
-        if (animalType is not null)
+        if (animalType != null)
             return Json(animalType);
-
-        return StatusCode(404);
+        else
+            return StatusCode(404);
     }
 }

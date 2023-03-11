@@ -12,18 +12,20 @@ public partial class AnimalsController : ApiController
     }
 
     [HttpGet("{id?}")]
-    public IActionResult Get(int? id)
+    public IActionResult Get(long? id)
     {
         if (id is null || id <= 0)
             return StatusCode(400);
 
         Animal? animal = context.Animals.FirstOrDefault(animal => animal.Id == id);
-        if (animal is null)
+        if (animal != null)
+        {
+            animal.AnimalTypes = context.AnimalsTypesLinks.Where(l => l.AnimalId == animal.Id).Select(lt => lt.AnimalTypeId).ToArray();
+            animal.VisitedLocations = new long[0];
+            return Json(animal);
+        }
+        else
             return StatusCode(404);
-
-        animal.AnimalTypes = context.AnimalsTypesLinks.Where(l => l.AnimalId == animal.Id).Select(lt => lt.AnimalTypeId).ToArray();
-        animal.VisitedLocations = new long[0];
-        return Json(animal);
     }
 
     [HttpGet("search")]
@@ -80,4 +82,5 @@ public partial class AnimalsController : ApiController
 
 
     /* part <AnimalsController.Types.cs> */
+    /* part <AnimalsController.Locations.cs> */
 }
