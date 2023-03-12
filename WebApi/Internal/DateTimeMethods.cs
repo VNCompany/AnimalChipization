@@ -2,6 +2,9 @@
 
 namespace WebApi.Internal;
 
+public enum DateTimeValidationStatus { Null = 0, Failure = 1, Success = 2 }
+public record DateTimeValidationResult(DateTimeValidationStatus Status, DateTime Value = default);
+
 /// <summary>
 /// Класс методов для работы с датой и временем в формате ISO-8601 
 /// </summary>
@@ -27,18 +30,16 @@ public static class DateTimeMethods
     /// </summary>
     /// <param name="formattedDateTime">строка с датой и временем в формате ISO-8601</param>
     /// <returns>Структура, представляющая результат парсинга и валидации даты и времени</returns>
-    public static DateTimeValidationParameters Parse(string? formattedDateTime)
+    public static DateTimeValidationResult Parse(string? formattedDateTime)
     {
         if (formattedDateTime is null)
-            return new DateTimeValidationParameters(DateTimeValidationStatus.Null);
+            return new(DateTimeValidationStatus.Null);
 
         if (regex.IsMatch(formattedDateTime))
         {
             if (DateTime.TryParse(formattedDateTime, out DateTime dateTime))
-                return new DateTimeValidationParameters(
-                    DateTimeValidationStatus.Success, 
-                    dateTime);
+                return new(DateTimeValidationStatus.Success, dateTime);
         }
-        return new DateTimeValidationParameters(DateTimeValidationStatus.InvalidDateTime);
+        return new(DateTimeValidationStatus.Failure);
     }
 }
