@@ -8,7 +8,7 @@ namespace WebApi.Controllers;
 
 public class RegistrationController : ApiController
 {
-    [HttpGet]
+    [HttpPost]
     public IActionResult Get([FromServices]IAuthorizationService authorizationService, [FromBody]AccountModel model)
     {
         if (Authorize(HttpContext))
