@@ -15,8 +15,8 @@ public partial class AnimalsController  /* Locations */
 
         if (animalId <= 0
             || from < 0 || size <= 0
-            || startDateTimeParams.Status == DateTimeValidationStatus.InvalidDateTime
-            || endDateTimeParams.Status == DateTimeValidationStatus.InvalidDateTime)
+            || startDateTimeParams.Status == DateTimeValidationStatus.Failure
+            || endDateTimeParams.Status == DateTimeValidationStatus.Failure)
             return StatusCode(400);
 
         if (context.Animals.Where(a => a.Id == animalId).LongCount() == 0)
@@ -25,9 +25,9 @@ public partial class AnimalsController  /* Locations */
         IEnumerable<VisitedLocation> visitedLocations = context.VisitedLocations.Where(vlo => vlo.AnimalId == animalId);
 
         if (startDateTimeParams.Status == DateTimeValidationStatus.Success)
-            visitedLocations = visitedLocations.Where(vlo => vlo.DateTimeOfVisitLocationPoint >= startDateTimeParams.DateTime);
+            visitedLocations = visitedLocations.Where(vlo => vlo.DateTimeOfVisitLocationPoint >= startDateTimeParams.Value);
         if (endDateTimeParams.Status == DateTimeValidationStatus.Success)
-            visitedLocations = visitedLocations.Where(vlo => vlo.DateTimeOfVisitLocationPoint <= endDateTimeParams.DateTime);
+            visitedLocations = visitedLocations.Where(vlo => vlo.DateTimeOfVisitLocationPoint <= endDateTimeParams.Value);
 
         return Json(visitedLocations.OrderBy(vlo => vlo.DateTimeOfVisitLocationPoint).Skip(from).Take(size));
     }

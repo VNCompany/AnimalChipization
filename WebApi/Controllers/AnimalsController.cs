@@ -38,16 +38,16 @@ public partial class AnimalsController : ApiController
         var endDateTimeParams = DateTimeMethods.Parse(GetQueryParameterString("endDateTime"));
 
         if (from < 0 || size <= 0
-            || startDateTimeParams.Status == DateTimeValidationStatus.InvalidDateTime
-            || endDateTimeParams.Status == DateTimeValidationStatus.InvalidDateTime)
+            || startDateTimeParams.Status == DateTimeValidationStatus.Failure
+            || endDateTimeParams.Status == DateTimeValidationStatus.Failure)
             return StatusCode(400);
 
         IEnumerable<Animal> animals = context.Animals;
 
         if (startDateTimeParams.Status == DateTimeValidationStatus.Success)
-            animals = animals.Where(animal => animal.ChippingDateTime >= startDateTimeParams.DateTime);
+            animals = animals.Where(animal => animal.ChippingDateTime >= startDateTimeParams.Value);
         if (endDateTimeParams.Status == DateTimeValidationStatus.Success)
-            animals = animals.Where(animal => animal.ChippingDateTime <= endDateTimeParams.DateTime);
+            animals = animals.Where(animal => animal.ChippingDateTime <= endDateTimeParams.Value);
 
         int? chipperId = GetQueryParameterInt32("chipperId");
         if (chipperId is not null)
