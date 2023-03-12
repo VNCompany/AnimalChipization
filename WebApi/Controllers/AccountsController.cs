@@ -1,4 +1,5 @@
-﻿using DataLayer;
+﻿using WebApi.Models;
+using DataLayer;
 using DataLayer.Entities;
 
 namespace WebApi.Controllers;
@@ -50,5 +51,48 @@ public class AccountsController : ApiController
             accounts = accounts.Where(account => account.Email.ToLower().Contains(email.ToLower()));
 
         return Json(accounts.Skip(from).Take(size));
+    }
+
+    [HttpPut("{id?}")]
+    [Authorize]
+    public IActionResult Put(int? id, [FromBody]AccountModel model)
+    {
+        if (id != null && id > 0 && model.Validate())
+        {
+            if (id == Account!.Id)
+            {
+                if (context.Accounts.Count(a => a.Email == model.Email) == 0)
+                {
+                    Account account = context.Accounts.First(a => a.Id == id);
+                    account.FirstName = model.FirstName!;
+                    account.LastName = model.LastName!;
+                    account.Email = model.Email!;
+                    account.Password = Services.AuthorizationService.SHA256Hash(model.Password!);
+                    context.SaveChanges();
+                    return Json(account);
+                }
+                else return StatusCode(409);
+            }
+            else return StatusCode(403);
+        }
+        else return StatusCode(400);
+    }
+
+    [HttpDelete("{id?}")]
+    [Authorize]
+    public IActionResult Delete(int? id)
+    {
+        if (id != null && id > 0
+            && context.Animals.Count(a => a.ChipperId == id) == 0)
+        {
+            if (Account!.Id == id)
+            {
+                context.Accounts.Remove(Account);
+                context.SaveChanges();
+                return StatusCode(200);
+            }
+            else return StatusCode(403);
+        }
+        else return StatusCode(400);
     }
 }

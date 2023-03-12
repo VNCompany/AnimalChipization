@@ -15,7 +15,7 @@ public class AuthorizationService : IAuthorizationService
         this.context = context;
     }
 
-    private static string SHA256Hash(string input)
+    public static string SHA256Hash(string input)
     {
         using SHA256 sha = SHA256.Create();
         return string.Concat(
