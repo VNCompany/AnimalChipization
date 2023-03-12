@@ -59,7 +59,7 @@ public class AuthorizationService : IAuthorizationService
     {
         if (context.Accounts.Count(a => a.Email == accountModel.Email) == 0)
         {
-            Account account = accountModel.ToEntity();
+            Account account = accountModel.ToEntity(new Account());
             account.Password = SHA256Hash(account.Password);
             context.Accounts.Add(account);
             context.SaveChanges();

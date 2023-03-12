@@ -64,10 +64,8 @@ public class AccountsController : ApiController
                 if (context.Accounts.Count(a => a.Email == model.Email) == 0)
                 {
                     Account account = context.Accounts.First(a => a.Id == id);
-                    account.FirstName = model.FirstName!;
-                    account.LastName = model.LastName!;
-                    account.Email = model.Email!;
-                    account.Password = Services.AuthorizationService.SHA256Hash(model.Password!);
+                    model.ToEntity(account);
+                    account.Password = Services.AuthorizationService.SHA256Hash(account.Password);
                     context.SaveChanges();
                     return Json(account);
                 }
