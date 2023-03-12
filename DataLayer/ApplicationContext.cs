@@ -27,16 +27,19 @@ public class ApplicationContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Настройки для модели Animal
+        // Настройки для сущности Account
+        modelBuilder.Entity<Account>().HasIndex(p => p.Email).IsUnique();
+
+        // Настройки для сущности Animal
         modelBuilder.Entity<Animal>().Ignore(prop => prop.AnimalTypes);
         modelBuilder.Entity<Animal>().Ignore(prop => prop.VisitedLocations);
 
-        // Настройки для модели AnimalsTypesLinks
+        // Настройки для сущности AnimalsTypesLinks
         modelBuilder.Entity<AnimalsTypesLink>().HasKey(key => new { key.AnimalId, key.AnimalTypeId });
 
         modelBuilder.Entity<Account>().HasData(
-            new { Id = 1, FirstName = "Victor", LastName = "Neznanov", Email = "i@vneznanov.ru", Password = "99bde068af2d49ed7fc8b8fa79abe13a6059e0db320bb73459fd96624bb4b33f" },
-            new { Id = 2, FirstName = "Anton", LastName = "Belousov", Email = "i@vneznanov.ru", Password = "1f29f2d29f02f2608eb72d45625ba3a851eda1ee2be1bda22427a584b787c722" });
+            new { Id = 1, FirstName = "Victor", LastName = "Neznanov", Email = "victor@mail.ru", Password = "99bde068af2d49ed7fc8b8fa79abe13a6059e0db320bb73459fd96624bb4b33f" },
+            new { Id = 2, FirstName = "Anton", LastName = "Belousov", Email = "anton@mail.ru", Password = "1f29f2d29f02f2608eb72d45625ba3a851eda1ee2be1bda22427a584b787c722" });
 
         modelBuilder.Entity<LocationPoint>().HasData(
             new { Id = 1L, Latitude = 56.195, Longitude = 23.1212 },

@@ -1,4 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
+using System.Reflection;
+
+using WebApi.Services;
+using DataLayer.Entities;
 
 namespace WebApi.Controllers;
 
@@ -6,10 +10,40 @@ namespace WebApi.Controllers;
 [ApiController]
 public class ApiController : Controller
 {
+    protected Account? Account { get; private set; }
+
     public override void OnActionExecuting(ActionExecutingContext context)
     {
-        // TODO
+        var controller = (Controller)context.Controller;
+        var authorizeAttr = controller.ControllerContext.ActionDescriptor.MethodInfo.GetCustomAttribute<AuthorizeAttribute>();
+        
+        // У action имеется атрибут Authorize
+        if (authorizeAttr != null)
+        {
+            if (!Authorize(controller.HttpContext))
+                context.Result = StatusCode(401);
+        }
+
         base.OnActionExecuting(context);
+    }
+
+    protected bool Authorize(HttpContext httpContext)
+    {
+        if (httpContext.Request.Headers.TryGetValue("Authorization", out var value))
+        {
+            string token = value.ToString();
+            if (!string.IsNullOrWhiteSpace(token)
+                && token.StartsWith("Basic "))
+            {
+                var authorizationService = httpContext.RequestServices.GetRequiredService<IAuthorizationService>();
+                if (authorizationService.Authorize(token.Substring(6), out Account? account))
+                {
+                    Account = account;
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     //
