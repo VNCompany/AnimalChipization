@@ -1,8 +1,10 @@
-﻿using DataLayer.Entities;
+﻿using System.Net.Mail;
+
+using DataLayer.Entities;
 
 namespace WebApi.Models;
 
-public class AccountModel
+public class AccountModel : IModel
 {
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
@@ -19,4 +21,11 @@ public class AccountModel
             Password = this.Password ?? throw new ArgumentNullException(nameof(Password)),
         };
     }
+
+    public bool Validate()
+        => !string.IsNullOrWhiteSpace(FirstName)
+            && !string.IsNullOrWhiteSpace(LastName)
+            && !string.IsNullOrWhiteSpace(Email)
+            && !string.IsNullOrWhiteSpace(Password)
+            && MailAddress.TryCreate(Email!, out var _);  // Проверка email на соответствие стандарту RFC 822
 }
