@@ -9,13 +9,17 @@ public class Animal
     public float Length { get; set; }
     public float Height { get; set; }
     public string Gender { get; set; } = string.Empty;
-    public string LifeStatus { get; set; } = string.Empty;
+    public string LifeStatus { get; set; } = "ALIVE";
     public DateTime? ChippingDateTime { get; set; }
-    public int ChipperId { get; set; }
-    public Account Chipper { get; set; } = null!;
+    public DateTime? DeathDateTime { get; set; }
 
-    public long ChippingLocationId { get; set; }
+    [JsonIgnore]
+    public Account Chipper { get; set; } = null!;
+    public int ChipperId { get; set; }
+
+    [JsonIgnore]
     public LocationPoint ChippingLocation { get; set; } = null!;
+    public long ChippingLocationId { get; set; }
 
     [JsonIgnore]
     public List<AnimalsTypesLink> AnimalsTypesLinks { get; set; } = new();

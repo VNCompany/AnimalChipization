@@ -1,4 +1,5 @@
-﻿using DataLayer;
+﻿using WebApi.Models;
+using DataLayer;
 using DataLayer.Entities;
 
 namespace WebApi.Controllers;
@@ -81,6 +82,47 @@ public partial class AnimalsController : ApiController
             context.LoadAnimalDependecies(a.Id);
             return a;
         }));
+    }
+
+    [HttpPost]
+    [Authorize]
+    public IActionResult Post([FromBody]AnimalPostModel model)
+    {
+        if (model.Validate())
+        {
+            long?[] animalTypes = model.AnimalTypes!;
+            if (animalTypes.Length == animalTypes.Distinct().Count())
+            {
+                if (context.Accounts.Count(a => a.Id == model!.ChipperId) == 0
+                    || context.LocationPoints.Count(lp => lp.Id == model!.ChippingLocationId) == 0)
+                    return StatusCode(404);
+
+                List<AnimalType> selectedAnimalTypes = new List<AnimalType>(animalTypes.Length);
+                foreach (long? animalTypeId in animalTypes)
+                {
+                    AnimalType? animalType = context.AnimalTypes.FirstOrDefault(t => t.Id == animalTypeId);
+                    if (animalType != null)
+                        selectedAnimalTypes.Add(animalType);
+                    else
+                        return StatusCode(404);  // Тип животного с Id == animalTypeId не найден
+                }
+
+                Animal newAnimal = model.ToEntity(new Animal() { ChippingDateTime = DateTimeMethods.NowWithoutMilliseconds() });
+                context.Animals.Add(newAnimal);
+                context.AnimalsTypesLinks.AddRange(
+                    selectedAnimalTypes.Select(t => new AnimalsTypesLink
+                    {
+                        Animal = newAnimal,
+                        AnimalType = t
+                    }));
+                context.SaveChanges();
+
+                Response.StatusCode = 201;
+                return Json(newAnimal);
+            }
+            else return StatusCode(409);
+        }
+        else return StatusCode(400);
     }
 
 

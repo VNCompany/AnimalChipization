@@ -75,7 +75,8 @@ public class LocationsController : ApiController
             LocationPoint? entity = context.LocationPoints.FirstOrDefault(lp => lp.Id == id);
             if (entity != null)
             {
-                if (context.VisitedLocations.Count(vl => vl.LocationPointId == entity.Id) == 0)
+                if (context.VisitedLocations.Count(vl => vl.LocationPointId == entity.Id) == 0
+                    && context.Animals.Count(a => a.ChippingLocationId == entity.Id) == 0)
                 {
                     context.LocationPoints.Remove(entity);
                     context.SaveChanges();
