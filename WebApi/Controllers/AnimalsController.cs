@@ -20,8 +20,7 @@ public partial class AnimalsController : ApiController
         Animal? animal = context.Animals.FirstOrDefault(animal => animal.Id == id);
         if (animal != null)
         {
-            animal.AnimalTypes = context.AnimalsTypesLinks.Where(l => l.AnimalId == animal.Id).Select(lt => lt.AnimalTypeId).ToArray();
-            animal.VisitedLocations = new long[0];
+            context.LoadAnimalDependecies(animal.Id);
             return Json(animal);
         }
         else
@@ -67,7 +66,7 @@ public partial class AnimalsController : ApiController
         if (lifeStatus is not null)
         {
             if (new[] { "ALIVE", "DEAD" }.Contains(lifeStatus) == false) return StatusCode(400);
-            animals = animals.Where(animal => animal.LifeStatis == lifeStatus);
+            animals = animals.Where(animal => animal.LifeStatus == lifeStatus);
         }
 
         string? gender = GetQueryParameterString("gender");
@@ -77,7 +76,11 @@ public partial class AnimalsController : ApiController
             animals = animals.Where(animal => animal.Gender == gender);
         }
 
-        return Json(animals.Skip(from).Take(size));
+        return Json(animals.Skip(from).Take(size).Select((a) =>
+        {
+            context.LoadAnimalDependecies(a.Id);
+            return a;
+        }));
     }
 
 

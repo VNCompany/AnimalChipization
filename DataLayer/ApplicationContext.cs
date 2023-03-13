@@ -19,6 +19,12 @@ public class ApplicationContext : DbContext
         this.connectionString = connectionString;
     }
 
+    public void LoadAnimalDependecies(long animalId)
+    {
+        AnimalsTypesLinks.Where(atl => atl.AnimalId == animalId).Load();
+        VisitedLocations.Where(vl => vl.AnimalId == animalId).Load();
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     { 
         optionsBuilder.UseMySql(connectionString, new MySqlServerVersion(new Version(10, 3, 22)));
@@ -31,8 +37,7 @@ public class ApplicationContext : DbContext
         modelBuilder.Entity<Account>().HasIndex(p => p.Email).IsUnique();
 
         // Настройки для сущности Animal
-        modelBuilder.Entity<Animal>().Ignore(prop => prop.AnimalTypes);
-        modelBuilder.Entity<Animal>().Ignore(prop => prop.VisitedLocations);
+        modelBuilder.Entity<Animal>().Property(p => p.LifeStatus).HasDefaultValue("ALIVE");
 
         // Настройки для сущности AnimalsTypesLinks
         modelBuilder.Entity<AnimalsTypesLink>().HasKey(key => new { key.AnimalId, key.AnimalTypeId });
@@ -53,7 +58,6 @@ public class ApplicationContext : DbContext
                 Length = 185.5f,
                 Height = 95.7f,
                 Gender = "MALE",
-                LifeStatis = "ALIVE",
                 ChippingDateTime = new DateTime(2022, 7, 13, 12, 23, 54),
                 ChipperId = 1,
                 ChippingLocationId = 1

@@ -1,4 +1,6 @@
-﻿namespace DataLayer.Entities;
+﻿using System.Text.Json.Serialization;
+
+namespace DataLayer.Entities;
 
 public class Animal
 {
@@ -7,13 +9,21 @@ public class Animal
     public float Length { get; set; }
     public float Height { get; set; }
     public string Gender { get; set; } = string.Empty;
-    public string LifeStatis { get; set; } = string.Empty;
+    public string LifeStatus { get; set; } = string.Empty;
     public DateTime? ChippingDateTime { get; set; }
     public int ChipperId { get; set; }
     public Account Chipper { get; set; } = null!;
+
     public long ChippingLocationId { get; set; }
     public LocationPoint ChippingLocation { get; set; } = null!;
 
-    public long[]? AnimalTypes { get; set; }
-    public long[]? VisitedLocations { get; set; }
+    [JsonIgnore]
+    public List<AnimalsTypesLink> AnimalsTypesLinks { get; set; } = new();
+    [JsonIgnore]
+    public List<VisitedLocation> VisitedLocations { get; set; } = new();
+
+    [JsonPropertyName("animalTypes")]
+    public IEnumerable<long> AnimalTypesIds => AnimalsTypesLinks.Select(atl => atl.AnimalTypeId);
+    [JsonPropertyName("visitedLocations")]
+    public IEnumerable<long> VisitedLocationsIds => VisitedLocations.Select(vl => vl.Id);
 }
