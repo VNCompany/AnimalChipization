@@ -125,6 +125,12 @@ public partial class AnimalsController : ApiController
         else return StatusCode(400);
     }
 
+    [HttpPut("{id?}")]
+    [Authorize]
+    public IActionResult Put(long? id, [FromBody]AnimalPutModel model)
+    {
+        return StatusCode(501);
+    }
 
     /* part <AnimalsController.Types.cs> */
     /* part <AnimalsController.Locations.cs> */
