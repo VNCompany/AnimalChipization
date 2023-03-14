@@ -2,6 +2,8 @@
 using DataLayer;
 using DataLayer.Entities;
 
+using System.Diagnostics;
+
 namespace WebApi.Controllers;
 
 public partial class AnimalsController : ApiController
@@ -129,7 +131,50 @@ public partial class AnimalsController : ApiController
     [Authorize]
     public IActionResult Put(long? id, [FromBody]AnimalPutModel model)
     {
-        return StatusCode(501);
+        if (id != null && id > 0 && model.Validate())
+        {
+            Animal? animal = context.Animals.FirstOrDefault(a => a.Id == id);
+            Account? chipper = context.Accounts.FirstOrDefault(a => a.Id == model.ChipperId);
+            LocationPoint? chippingLocation = context.LocationPoints.FirstOrDefault(lp => lp.Id == model.ChippingLocationId);
+            if (animal != null && chipper != null && chippingLocation != null)
+            {
+                context.LoadAnimalDependecies(animal.Id);
+                if (!(animal.LifeStatus == "DEAD" && model.LifeStatus == "ALIVE")
+                    && (animal.VisitedLocations.Count == 0 || animal.VisitedLocations[0].LocationPointId != model.ChippingLocationId))
+                {
+                    model.ToEntity(animal);
+                    if (animal.LifeStatus == "DEAD")
+                        animal.DeathDateTime = DateTimeMethods.NowWithoutMilliseconds();
+                    context.SaveChanges();
+                    return Json(animal);
+                }
+                else return StatusCode(400);
+            }
+            else return StatusCode(404);
+        }
+        return StatusCode(400);
+    }
+
+    [HttpDelete("{id?}")]
+    [Authorize]
+    public IActionResult Delete(long? id)
+    {
+        if (id != null && id > 0)
+        {
+            Animal? animal = context.Animals.FirstOrDefault(a => a.Id == id);
+            if (animal != null)
+            {
+                context.LoadAnimalDependecies(animal.Id);
+                if (animal.VisitedLocations.Count == 0)
+                {
+                    context.Animals.Remove(animal);
+                    context.SaveChanges();
+                    return StatusCode(200);
+                }
+            }
+            else return StatusCode(404);
+        }
+        return StatusCode(400);
     }
 
     /* part <AnimalsController.Types.cs> */

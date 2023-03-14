@@ -19,7 +19,7 @@ public partial class AnimalsController  /* Types */
 
     [HttpPost("types")]
     [Authorize]
-    public IActionResult TypesPost([FromBody]Dictionary<string, string?> body)
+    public IActionResult TypesPost([FromBody] Dictionary<string, string?> body)
     {
         string? type;
         if (!body.TryGetValue("type", out type)
@@ -40,7 +40,7 @@ public partial class AnimalsController  /* Types */
 
     [HttpPut("types/{id?}")]
     [Authorize]
-    public IActionResult TypesPut(long? id, [FromBody]Dictionary<string, string?> body)
+    public IActionResult TypesPut(long? id, [FromBody] Dictionary<string, string?> body)
     {
         string? type;
         if (id == null || id <= 0
@@ -81,5 +81,20 @@ public partial class AnimalsController  /* Types */
             else return StatusCode(404);
         }
         return StatusCode(400);
+    }
+
+    [HttpPost("{animalId}/types")]
+    [Authorize]
+    public IActionResult AnimalsTypesPostE1() => StatusCode(400);  // typeId is null
+    
+    [HttpPost("types/{typeId}")]
+    [Authorize]
+    public IActionResult AnimalsTypesPostE2() => StatusCode(400); // animalId is null
+
+    [HttpPost("{animalId?}/types/{typeId?}")]
+    [Authorize]
+    public object AnimalTypesAdd(long? animalId, long? typeId)
+    {
+        return new { animalId, typeId };
     }
 }
