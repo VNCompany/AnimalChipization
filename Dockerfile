@@ -17,5 +17,7 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
+EXPOSE 8080
+
 CMD ["dotnet", "ef", "database", "update"]
 ENTRYPOINT ["dotnet", "WebApi.dll"]

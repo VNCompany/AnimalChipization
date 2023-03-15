@@ -14,7 +14,11 @@
       "launchBrowser": false,
       "applicationUrl": "http://0.0.0.0:8080",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DB_SERVER": "127.0.0.1",
+        "DB_USER": "root",
+        "DB_PASSWORD": "root",
+        "DB_DATABASE": "animalchipization"
       }
     },
     "IIS Express": {
