@@ -8,6 +8,8 @@ services:
                         - MYSQL_ROOT_PASSWORD=root
         webapi:
                 image: webapi
+                build:
+                        context: .
                 ports: 
                         - "8080:8080"
                 depends_on:
@@ -18,4 +20,13 @@ services:
                         - DB_USER=root
                         - DB_PASSWORD=root
                         - DB_DATABASE=animalchipization
+        tests:
+                image: mrexpen/planet_olymp_phase1
+                ports:
+                        - "8090:8080"
+                depends_on:
+                        - webapi
+                environment:
+                        - SERVER_URL=http://webapi:8080
+                        - STAGE=all
 
