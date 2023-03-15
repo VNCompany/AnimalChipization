@@ -19,5 +19,4 @@ COPY --from=publish /app/publish .
 
 EXPOSE 8080
 
-CMD ["dotnet", "ef", "database", "update"]
-ENTRYPOINT ["dotnet", "WebApi.dll"]
+ENTRYPOINT ["dotnet", "WebApi.dll", "--urls", "http://0.0.0.0:8080"]

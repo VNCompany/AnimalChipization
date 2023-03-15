@@ -19,6 +19,12 @@ public class ApplicationContext : DbContext
         this.connectionString = connectionString;
     }
 
+    public void Migrate()
+    {
+        if (Database.GetPendingMigrations().Any())
+            Database.Migrate();
+    }
+
     public void LoadAnimalDependecies(long animalId)
     {
         AnimalsTypesLinks.Where(atl => atl.AnimalId == animalId).Load();
