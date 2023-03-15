@@ -107,6 +107,7 @@ public partial class AnimalsController  /* Types */
                 context.AnimalsTypesLinks.Add(new AnimalsTypesLink { Animal = animal, AnimalType = animalType });
                 context.SaveChanges();
                 context.LoadAnimalDependecies(animal.Id);
+                Response.StatusCode = 201;
                 return Json(animal);
             }
             else return StatusCode(409);
@@ -139,6 +140,35 @@ public partial class AnimalsController  /* Types */
 
                 context.AnimalsTypesLinks.Remove(oldAnimalTypeLink);
                 context.AnimalsTypesLinks.Add(new AnimalsTypesLink { Animal = animal, AnimalType = newAnimalType });
+                context.SaveChanges();
+                return Json(animal);
+            }
+        }
+        return StatusCode(404);
+    }
+
+    [HttpDelete("{animalId}/types")]
+    [Authorize]
+    public StatusCodeResult AnimalTypesDelete__condNullableTypeId() => StatusCode(400);
+
+    [HttpDelete("{animalId}/types/{typeId}")]
+    [Authorize]
+    public IActionResult AnimalTypesDelete(long animalId, long typeId)
+    {
+        if (animalId <= 0 || typeId <= 0)
+            return StatusCode(400);
+
+        Animal? animal = context.Animals.FirstOrDefault(a => a.Id == animalId);
+        if (animal != null)
+        {
+            List<AnimalsTypesLink> animalsTypesLinks = context.AnimalsTypesLinks.Where(atl => atl.AnimalId == animal.Id).ToList();
+            AnimalsTypesLink? animalsTypesLink = animalsTypesLinks.Find(atl => atl.AnimalTypeId == typeId);
+            if (animalsTypesLink != null)
+            {
+                if (animalsTypesLinks.Count == 1)
+                    return StatusCode(400);  // У животного только один тип и это тип с typeId
+
+                context.AnimalsTypesLinks.Remove(animalsTypesLink);
                 context.SaveChanges();
                 return Json(animal);
             }
