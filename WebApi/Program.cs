@@ -6,6 +6,8 @@ string mySqlUser = Environment.GetEnvironmentVariable("DB_USER") ?? throw new Ar
 string mySqlPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? throw new ArgumentNullException("DB_PASSWORD");
 string mySqlDatabase = Environment.GetEnvironmentVariable("DB_DATABASE") ?? throw new ArgumentNullException("DB_DATABASE");
 
+Console.WriteLine($"Server={mySqlServer}, User={mySqlUser}, Password={mySqlPassword}, Database={mySqlDatabase}");
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddJsonOptions(
     options =>
