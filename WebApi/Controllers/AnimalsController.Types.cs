@@ -85,16 +85,64 @@ public partial class AnimalsController  /* Types */
 
     [HttpPost("{animalId}/types")]
     [Authorize]
-    public IActionResult AnimalsTypesPostE1() => StatusCode(400);  // typeId is null
+    public StatusCodeResult AnimalsTypesPost__condNullableTypeId() => StatusCode(400);  // typeId is null
     
     [HttpPost("types/{typeId}")]
     [Authorize]
-    public IActionResult AnimalsTypesPostE2() => StatusCode(400); // animalId is null
+    public StatusCodeResult AnimalsTypesPost__condNullableAnimalId() => StatusCode(400); // animalId is null
 
-    [HttpPost("{animalId?}/types/{typeId?}")]
+    [HttpPost("{animalId}/types/{typeId}")]
     [Authorize]
-    public object AnimalTypesAdd(long? animalId, long? typeId)
+    public IActionResult AnimalTypesPost(long animalId, long typeId)
     {
-        return new { animalId, typeId };
+        if (animalId <= 0 || typeId <= 0) return StatusCode(400);
+
+        Animal? animal; AnimalType? animalType;
+        if ((animal = context.Animals.FirstOrDefault(a => a.Id == animalId)) != null
+            && (animalType = context.AnimalTypes.FirstOrDefault(t => t.Id == typeId)) != null)
+        {
+            if (context.AnimalsTypesLinks.Count(
+                atl => atl.AnimalId == animalId && atl.AnimalTypeId == typeId) == 0)
+            {
+                context.AnimalsTypesLinks.Add(new AnimalsTypesLink { Animal = animal, AnimalType = animalType });
+                context.SaveChanges();
+                context.LoadAnimalDependecies(animal.Id);
+                return Json(animal);
+            }
+            else return StatusCode(409);
+        }
+        else return StatusCode(404);
+    }
+
+    [HttpPut("{animalId?}/types")]
+    [Authorize]
+    public IActionResult AnimalTypesPut(long? animalId, [FromBody] Dictionary<string, long?> body)
+    {
+        if (animalId == null || animalId <= 0 || body.Count < 2
+            || !body.TryGetValue("oldTypeId", out long? oldTypeId)
+            || !body.TryGetValue("newTypeId", out long? newTypeId)
+            || oldTypeId == null || newTypeId == null
+            || oldTypeId <= 0 || newTypeId <= 0)
+            return StatusCode(400);
+
+        Animal? animal = context.Animals.FirstOrDefault(a => a.Id == animalId);
+        if (animal != null)
+        {
+            List<AnimalsTypesLink> animalTypesLinks = context.AnimalsTypesLinks.Where(atl => atl.AnimalId == animal.Id).ToList();
+            AnimalsTypesLink? oldAnimalTypeLink;
+            AnimalType? newAnimalType;
+            if ((oldAnimalTypeLink = animalTypesLinks.Find(atl => atl.AnimalTypeId == oldTypeId)) != null
+                && (newAnimalType = context.AnimalTypes.FirstOrDefault(t => t.Id == newTypeId)) != null)
+            {
+                if (animalTypesLinks.Find(atl => atl.AnimalTypeId == newTypeId) != null)
+                    return StatusCode(409);
+
+                context.AnimalsTypesLinks.Remove(oldAnimalTypeLink);
+                context.AnimalsTypesLinks.Add(new AnimalsTypesLink { Animal = animal, AnimalType = newAnimalType });
+                context.SaveChanges();
+                return Json(animal);
+            }
+        }
+        return StatusCode(404);
     }
 }
