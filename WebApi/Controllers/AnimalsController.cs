@@ -79,11 +79,9 @@ public partial class AnimalsController : ApiController
             animals = animals.Where(animal => animal.Gender == gender);
         }
 
-        return Json(animals.Skip(from).Take(size).Select((a) =>
-        {
-            context.LoadAnimalDependecies(a.Id);
-            return a;
-        }));
+        List<Animal> animalList = animals.Skip(from).Take(size).ToList();
+        context.LoadAnimalDependecies(animalList.Select(a => a.Id));
+        return Json(animalList);
     }
 
     [HttpPost]

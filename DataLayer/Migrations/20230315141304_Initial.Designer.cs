@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230313194304_EntityAnimalAddColumnDeathDateTime")]
-    partial class EntityAnimalAddColumnDeathDateTime
+    [Migration("20230315141304_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,24 +50,6 @@ namespace DataLayer.Migrations
                         .IsUnique();
 
                     b.ToTable("Accounts");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "victor@mail.ru",
-                            FirstName = "Victor",
-                            LastName = "Neznanov",
-                            Password = "99bde068af2d49ed7fc8b8fa79abe13a6059e0db320bb73459fd96624bb4b33f"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Email = "anton@mail.ru",
-                            FirstName = "Anton",
-                            LastName = "Belousov",
-                            Password = "1f29f2d29f02f2608eb72d45625ba3a851eda1ee2be1bda22427a584b787c722"
-                        });
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Animal", b =>
@@ -114,20 +96,6 @@ namespace DataLayer.Migrations
                     b.HasIndex("ChippingLocationId");
 
                     b.ToTable("Animals");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            ChipperId = 1,
-                            ChippingDateTime = new DateTime(2022, 7, 13, 12, 23, 54, 0, DateTimeKind.Unspecified),
-                            ChippingLocationId = 1L,
-                            Gender = "MALE",
-                            Height = 95.7f,
-                            Length = 185.5f,
-                            LifeStatus = "ALIVE",
-                            Weight = 200.2f
-                        });
                 });
 
             modelBuilder.Entity("DataLayer.Entities.AnimalType", b =>
@@ -143,18 +111,6 @@ namespace DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AnimalTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Type = "elephant"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Type = "monkey"
-                        });
                 });
 
             modelBuilder.Entity("DataLayer.Entities.AnimalsTypesLink", b =>
@@ -170,13 +126,6 @@ namespace DataLayer.Migrations
                     b.HasIndex("AnimalTypeId");
 
                     b.ToTable("AnimalsTypesLinks");
-
-                    b.HasData(
-                        new
-                        {
-                            AnimalId = 1L,
-                            AnimalTypeId = 2L
-                        });
                 });
 
             modelBuilder.Entity("DataLayer.Entities.LocationPoint", b =>
@@ -194,20 +143,6 @@ namespace DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LocationPoints");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Latitude = 56.195,
-                            Longitude = 23.121200000000002
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Latitude = 55.112400000000001,
-                            Longitude = 134.56729999999999
-                        });
                 });
 
             modelBuilder.Entity("DataLayer.Entities.VisitedLocation", b =>
@@ -232,15 +167,6 @@ namespace DataLayer.Migrations
                     b.HasIndex("LocationPointId");
 
                     b.ToTable("VisitedLocations");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            AnimalId = 1L,
-                            DateTimeOfVisitLocationPoint = new DateTime(2023, 2, 14, 13, 59, 33, 0, DateTimeKind.Local),
-                            LocationPointId = 1L
-                        });
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Animal", b =>

@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace DataLayer.Migrations
 {
     /// <inheritdoc />
@@ -27,7 +25,7 @@ namespace DataLayer.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LastName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "longtext", nullable: false)
+                    Email = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Password = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
@@ -79,9 +77,10 @@ namespace DataLayer.Migrations
                     Height = table.Column<float>(type: "float", nullable: false),
                     Gender = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    LifeStatis = table.Column<string>(type: "longtext", nullable: false)
+                    LifeStatus = table.Column<string>(type: "longtext", nullable: false, defaultValue: "ALIVE")
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ChippingDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    DeathDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     ChipperId = table.Column<int>(type: "int", nullable: false),
                     ChippingLocationId = table.Column<long>(type: "bigint", nullable: false)
                 },
@@ -156,47 +155,11 @@ namespace DataLayer.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.InsertData(
+            migrationBuilder.CreateIndex(
+                name: "IX_Accounts_Email",
                 table: "Accounts",
-                columns: new[] { "Id", "Email", "FirstName", "LastName", "Password" },
-                values: new object[,]
-                {
-                    { 1, "i@vneznanov.ru", "Victor", "Neznanov", "99bde068af2d49ed7fc8b8fa79abe13a6059e0db320bb73459fd96624bb4b33f" },
-                    { 2, "i@vneznanov.ru", "Anton", "Belousov", "1f29f2d29f02f2608eb72d45625ba3a851eda1ee2be1bda22427a584b787c722" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "AnimalTypes",
-                columns: new[] { "Id", "Type" },
-                values: new object[,]
-                {
-                    { 1L, "elephant" },
-                    { 2L, "monkey" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "LocationPoints",
-                columns: new[] { "Id", "Latitude", "Longitude" },
-                values: new object[,]
-                {
-                    { 1L, 56.195, 23.121200000000002 },
-                    { 2L, 55.112400000000001, 134.56729999999999 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Animals",
-                columns: new[] { "Id", "ChipperId", "ChippingDateTime", "ChippingLocationId", "Gender", "Height", "Length", "LifeStatis", "Weight" },
-                values: new object[] { 1L, 1, new DateTime(2022, 7, 13, 12, 23, 54, 0, DateTimeKind.Unspecified), 1L, "MALE", 95.7f, 185.5f, "ALIVE", 200.2f });
-
-            migrationBuilder.InsertData(
-                table: "AnimalsTypesLinks",
-                columns: new[] { "AnimalId", "AnimalTypeId" },
-                values: new object[] { 1L, 2L });
-
-            migrationBuilder.InsertData(
-                table: "VisitedLocations",
-                columns: new[] { "Id", "AnimalId", "DateTimeOfVisitLocationPoint", "LocationPointId" },
-                values: new object[] { 1L, 1L, new DateTime(2023, 2, 14, 13, 59, 33, 0, DateTimeKind.Local), 1L });
+                column: "Email",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Animals_ChipperId",
