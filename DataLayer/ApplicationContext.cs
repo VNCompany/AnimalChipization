@@ -39,7 +39,7 @@ public class ApplicationContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     { 
-        optionsBuilder.UseMySql(connectionString, new MySqlServerVersion(new Version(10, 3, 22)), options => options.EnableRetryOnFailure(2, TimeSpan.FromSeconds(5), null));
+        optionsBuilder.UseMySql(connectionString, new MySqlServerVersion(new Version(10, 3, 22)), options => options.EnableRetryOnFailure(5, TimeSpan.FromSeconds(15), null));
         base.OnConfiguring(optionsBuilder);
     }
 
