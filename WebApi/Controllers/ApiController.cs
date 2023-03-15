@@ -18,7 +18,7 @@ public class ApiController : Controller
         var authorizeAttr = controller.ControllerContext.ActionDescriptor.MethodInfo.GetCustomAttribute<AuthorizeAttribute>();
         
         // У action имеется атрибут Authorize
-        if (authorizeAttr != null)
+        if (authorizeAttr != null || controller.HttpContext.Request.Headers.ContainsKey("Authorization"))
         {
             if (!Authorize(controller.HttpContext))
                 context.Result = StatusCode(401);

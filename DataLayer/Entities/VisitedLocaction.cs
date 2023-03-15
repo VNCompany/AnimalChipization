@@ -13,5 +13,6 @@ public class VisitedLocation
 
     [JsonIgnore]
     public Animal Animal { get; set; } = null!;
+    [JsonIgnore]
     public long AnimalId { get; set; }
 }

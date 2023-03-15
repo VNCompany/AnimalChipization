@@ -44,6 +44,9 @@ public class ApplicationContext : DbContext
 
         // Настройки для сущности Animal
         modelBuilder.Entity<Animal>().Property(p => p.LifeStatus).HasDefaultValue("ALIVE");
+        modelBuilder.Entity<Animal>().Property(p => p.Weight).HasColumnType("FLOAT(13,8)");
+        modelBuilder.Entity<Animal>().Property(p => p.Length).HasColumnType("FLOAT(13,8)");
+        modelBuilder.Entity<Animal>().Property(p => p.Height).HasColumnType("FLOAT(13,8)");
 
         // Настройки для сущности AnimalsTypesLinks
         modelBuilder.Entity<AnimalsTypesLink>().HasKey(key => new { key.AnimalId, key.AnimalTypeId });

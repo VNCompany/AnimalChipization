@@ -61,13 +61,12 @@ public class AccountsController : ApiController
         {
             if (id == Account!.Id)
             {
-                if (context.Accounts.Count(a => a.Email == model.Email) == 0)
+                if (context.Accounts.Count(a => a.Email == model.Email) == 0 || Account.Email == model.Email)
                 {
-                    Account account = context.Accounts.First(a => a.Id == id);
-                    model.ToEntity(account);
-                    account.Password = Services.AuthorizationService.SHA256Hash(account.Password);
+                    model.ToEntity(Account);
+                    Account.Password = Services.AuthorizationService.SHA256Hash(Account.Password);
                     context.SaveChanges();
-                    return Json(account);
+                    return Json(Account);
                 }
                 else return StatusCode(409);
             }
