@@ -15,7 +15,7 @@ public class VisitedLocationsViewModel
     private VisitedLocationsViewModel(ApplicationContext context, Animal animal)
     {
         this.animal = animal;
-        VisitedLocations = context.VisitedLocations.Where(vl => vl.AnimalId == animal.Id).OrderBy(vl2 => vl2.DateTimeOfVisitLocationPoint).ToList();
+        VisitedLocations = context.VisitedLocations.Where(vl => vl.AnimalId == animal.Id).ToList();
     }
 
     public List<VisitedLocation> VisitedLocations { get; private set; }
