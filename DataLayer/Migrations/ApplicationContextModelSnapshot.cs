@@ -4,6 +4,7 @@ using DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -16,30 +17,40 @@ namespace DataLayer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("ProductVersion", "7.0.3")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("DataLayer.Entities.Account", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("text");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("USER");
 
                     b.HasKey("Id");
 
@@ -47,6 +58,35 @@ namespace DataLayer.Migrations
                         .IsUnique();
 
                     b.ToTable("Accounts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "admin@simbirsoft.com",
+                            FirstName = "adminFirstName",
+                            LastName = "adminLastName",
+                            Password = "qwerty123",
+                            Role = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "chipper@simbirsoft.com",
+                            FirstName = "chipperFirstName",
+                            LastName = "chipperLastName",
+                            Password = "qwerty123",
+                            Role = "CHIPER"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "user@simbirsoft.com",
+                            FirstName = "userFirstName",
+                            LastName = "userLastName",
+                            Password = "qwerty123",
+                            Role = "USER"
+                        });
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Animal", b =>
@@ -55,36 +95,38 @@ namespace DataLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
                     b.Property<int>("ChipperId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("ChippingDateTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<long>("ChippingLocationId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("DeathDateTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Gender")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
-                    b.Property<float>("Height")
-                        .HasColumnType("FLOAT(13,8)");
+                    b.Property<decimal>("Height")
+                        .HasColumnType("NUMERIC(13,8)");
 
-                    b.Property<float>("Length")
-                        .HasColumnType("FLOAT(13,8)");
+                    b.Property<decimal>("Length")
+                        .HasColumnType("NUMERIC(13,8)");
 
                     b.Property<string>("LifeStatus")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasDefaultValue("ALIVE");
 
-                    b.Property<float>("Weight")
-                        .HasColumnType("FLOAT(13,8)");
+                    b.Property<decimal>("Weight")
+                        .HasColumnType("NUMERIC(13,8)");
 
                     b.HasKey("Id");
 
@@ -101,9 +143,11 @@ namespace DataLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -131,11 +175,13 @@ namespace DataLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
                     b.Property<double>("Latitude")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
                     b.Property<double>("Longitude")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
@@ -148,11 +194,13 @@ namespace DataLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
                     b.Property<long>("AnimalId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("DateTimeOfVisitLocationPoint")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<long>("LocationPointId")
                         .HasColumnType("bigint");

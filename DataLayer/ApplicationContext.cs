@@ -7,12 +7,12 @@ public class ApplicationContext : DbContext
 {
     private readonly string connectionString;
 
-    public DbSet<Account> Accounts { get; set; }
-    public DbSet<LocationPoint> LocationPoints { get; set; }
-    public DbSet<Animal> Animals { get; set; }
-    public DbSet<AnimalType> AnimalTypes { get; set; }
-    public DbSet<AnimalsTypesLink> AnimalsTypesLinks { get; set; }
-    public DbSet<VisitedLocation> VisitedLocations { get; set; }
+    public DbSet<Account> Accounts { get; set; } = null!;
+    public DbSet<LocationPoint> LocationPoints { get; set; } = null!;
+    public DbSet<Animal> Animals { get; set; } = null!;
+    public DbSet<AnimalType> AnimalTypes { get; set; } = null!;
+    public DbSet<AnimalsTypesLink> AnimalsTypesLinks { get; set; } = null!;
+    public DbSet<VisitedLocation> VisitedLocations { get; set; } = null!;
 
     public ApplicationContext(string connectionString)
     {
@@ -38,21 +38,21 @@ public class ApplicationContext : DbContext
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { 
-        optionsBuilder.UseMySql(connectionString, new MySqlServerVersion(new Version(10, 3, 22)), options => options.EnableRetryOnFailure(5, TimeSpan.FromSeconds(15), null));
+    {
+        optionsBuilder.UseNpgsql(connectionString);
         base.OnConfiguring(optionsBuilder);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Настройки для сущности Account
-        modelBuilder.Entity<Account>().HasIndex(p => p.Email).IsUnique();
+        new EntityConfigurations.AccountConfiguration().Configure(modelBuilder.Entity<Account>());
 
         // Настройки для сущности Animal
         modelBuilder.Entity<Animal>().Property(p => p.LifeStatus).HasDefaultValue("ALIVE");
-        modelBuilder.Entity<Animal>().Property(p => p.Weight).HasColumnType("FLOAT(13,8)");
-        modelBuilder.Entity<Animal>().Property(p => p.Length).HasColumnType("FLOAT(13,8)");
-        modelBuilder.Entity<Animal>().Property(p => p.Height).HasColumnType("FLOAT(13,8)");
+        modelBuilder.Entity<Animal>().Property(p => p.Weight).HasColumnType("NUMERIC(13,8)");
+        modelBuilder.Entity<Animal>().Property(p => p.Length).HasColumnType("NUMERIC(13,8)");
+        modelBuilder.Entity<Animal>().Property(p => p.Height).HasColumnType("NUMERIC(13,8)");
 
         // Настройки для сущности AnimalsTypesLinks
         modelBuilder.Entity<AnimalsTypesLink>().HasKey(key => new { key.AnimalId, key.AnimalTypeId });

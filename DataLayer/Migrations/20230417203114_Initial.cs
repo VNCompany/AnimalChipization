@@ -1,8 +1,10 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
+
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
 namespace DataLayer.Migrations
 {
@@ -12,76 +14,64 @@ namespace DataLayer.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterDatabase()
-                .Annotation("MySql:CharSet", "utf8mb4");
-
             migrationBuilder.CreateTable(
                 name: "Accounts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    FirstName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    LastName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Password = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    FirstName = table.Column<string>(type: "text", nullable: false),
+                    LastName = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Role = table.Column<string>(type: "text", nullable: false, defaultValue: "USER"),
+                    Password = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Accounts", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AnimalTypes",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Type = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Type = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AnimalTypes", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "LocationPoints",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Latitude = table.Column<double>(type: "double", nullable: false),
-                    Longitude = table.Column<double>(type: "double", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Latitude = table.Column<double>(type: "double precision", nullable: false),
+                    Longitude = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LocationPoints", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Animals",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Weight = table.Column<float>(type: "float", nullable: false),
-                    Length = table.Column<float>(type: "float", nullable: false),
-                    Height = table.Column<float>(type: "float", nullable: false),
-                    Gender = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    LifeStatus = table.Column<string>(type: "longtext", nullable: false, defaultValue: "ALIVE")
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ChippingDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    DeathDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    ChipperId = table.Column<int>(type: "int", nullable: false),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Weight = table.Column<decimal>(type: "numeric(13,8)", nullable: false),
+                    Length = table.Column<decimal>(type: "numeric(13,8)", nullable: false),
+                    Height = table.Column<decimal>(type: "numeric(13,8)", nullable: false),
+                    Gender = table.Column<string>(type: "text", nullable: false),
+                    LifeStatus = table.Column<string>(type: "text", nullable: false, defaultValue: "ALIVE"),
+                    ChippingDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DeathDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ChipperId = table.Column<int>(type: "integer", nullable: false),
                     ChippingLocationId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
@@ -99,8 +89,7 @@ namespace DataLayer.Migrations
                         principalTable: "LocationPoints",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AnimalsTypesLinks",
@@ -124,16 +113,15 @@ namespace DataLayer.Migrations
                         principalTable: "Animals",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "VisitedLocations",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    DateTimeOfVisitLocationPoint = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    DateTimeOfVisitLocationPoint = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LocationPointId = table.Column<long>(type: "bigint", nullable: false),
                     AnimalId = table.Column<long>(type: "bigint", nullable: false)
                 },
@@ -152,8 +140,21 @@ namespace DataLayer.Migrations
                         principalTable: "LocationPoints",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
+
+            migrationBuilder.InsertData(
+                table: "Accounts",
+                columns: new[] { "Id", "Email", "FirstName", "LastName", "Password", "Role" },
+                values: new object[,]
+                {
+                    { 1, "admin@simbirsoft.com", "adminFirstName", "adminLastName", "qwerty123", "ADMIN" },
+                    { 2, "chipper@simbirsoft.com", "chipperFirstName", "chipperLastName", "qwerty123", "CHIPER" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Accounts",
+                columns: new[] { "Id", "Email", "FirstName", "LastName", "Password" },
+                values: new object[] { 3, "user@simbirsoft.com", "userFirstName", "userLastName", "qwerty123" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Accounts_Email",
