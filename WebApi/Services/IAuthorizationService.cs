@@ -14,7 +14,7 @@ public interface IAuthorizationService
     /// <param name="token">Токен авторизации в base64</param>
     /// <param name="account">Аккаунт пользователя. Имеет значение null, если авторизация не прошла</param>
     /// <returns>Возвращает true, если авторизация прошла успешно, false в противном случае</returns>
-    bool Authorize(string token, out Account? account);
+    Account? Authorize(string token);
 
     /// <summary>
     /// Регистрация нового пользователя

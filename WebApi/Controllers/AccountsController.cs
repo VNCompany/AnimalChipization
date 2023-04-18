@@ -67,13 +67,11 @@ public class AccountsController : ApiController
     }
 
     [HttpPost]
-    [Authorize]
+    [Authorize("ADMIN")]
     public IActionResult Post([FromBody]AccountModelExtended model, [FromServices]IAuthorizationService authorizationService)
     {
         if (!model.Validate())
             return StatusCode(400);
-        if (Account!.Role != Role.ADMIN)
-            return StatusCode(403);
 
         Account? registeredAccount = authorizationService.Register(model);
         if (registeredAccount is null)

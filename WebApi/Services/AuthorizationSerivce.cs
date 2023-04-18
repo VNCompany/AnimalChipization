@@ -24,7 +24,7 @@ public class AuthorizationService : IAuthorizationService
             .Select(b => b.ToString("x2")));
     }
 
-    public bool Authorize(string token, out Account? account)
+    public Account? Authorize(string token)
     {
         string[] tokenParts;
         try
@@ -35,8 +35,7 @@ public class AuthorizationService : IAuthorizationService
         }
         catch (FormatException)
         {
-            account = null;
-            return false;
+            return null;
         }
         (string login, string password) = (tokenParts[0], tokenParts[1]);
 
@@ -44,15 +43,9 @@ public class AuthorizationService : IAuthorizationService
 
         if (_account != null &&
             _account.Password.Equals(SHA256Hash(password)))
-        {
-            account = _account;
-            return true;
-        }
+            return _account;
         else
-        {
-            account = null;
-            return false;
-        }
+            return null;
     }
 
     public Account? Register(AccountModel accountModel)
