@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using DataLayer;
 using WebApi.Services;
 
@@ -28,6 +29,7 @@ builder.Services.AddControllers().AddJsonOptions(
     {
         options.JsonSerializerOptions.Converters.Add(new WebApi.Converters.DateTimeConverter());
         options.JsonSerializerOptions.Converters.Add(new WebApi.Converters.NullableDateTimeConverter());
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
 builder.Services.AddScoped(provider => new ApplicationContext(

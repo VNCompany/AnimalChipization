@@ -3,6 +3,7 @@ using System;
 using DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230417214644_RenameChipperRole")]
+    partial class RenameChipperRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,7 +69,7 @@ namespace DataLayer.Migrations
                             Email = "admin@simbirsoft.com",
                             FirstName = "adminFirstName",
                             LastName = "adminLastName",
-                            Password = "daaad6e5604e8e17bd9f108d91e26afe6281dac8fda0091040a7a6d7bd9b43b5",
+                            Password = "qwerty123",
                             Role = "ADMIN"
                         },
                         new
@@ -75,7 +78,7 @@ namespace DataLayer.Migrations
                             Email = "chipper@simbirsoft.com",
                             FirstName = "chipperFirstName",
                             LastName = "chipperLastName",
-                            Password = "daaad6e5604e8e17bd9f108d91e26afe6281dac8fda0091040a7a6d7bd9b43b5",
+                            Password = "qwerty123",
                             Role = "CHIPPER"
                         },
                         new
@@ -84,7 +87,7 @@ namespace DataLayer.Migrations
                             Email = "user@simbirsoft.com",
                             FirstName = "userFirstName",
                             LastName = "userLastName",
-                            Password = "daaad6e5604e8e17bd9f108d91e26afe6281dac8fda0091040a7a6d7bd9b43b5",
+                            Password = "qwerty123",
                             Role = "USER"
                         });
                 });

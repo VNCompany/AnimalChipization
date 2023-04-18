@@ -11,7 +11,7 @@ public class AccountModel : IModel<Account>
     public string? Email { get; set; }
     public string? Password { get; set; }
 
-    public Account ToEntity(Account entity)
+    public virtual Account ToEntity(Account entity)
     {
         entity.Email = Email ?? throw new ArgumentNullException(nameof(Email));
         entity.FirstName = FirstName ?? throw new ArgumentNullException(nameof(FirstName));
@@ -20,7 +20,7 @@ public class AccountModel : IModel<Account>
         return entity;
     }
 
-    public bool Validate()
+    public virtual bool Validate()
         => !string.IsNullOrWhiteSpace(FirstName)
             && !string.IsNullOrWhiteSpace(LastName)
             && !string.IsNullOrWhiteSpace(Email)

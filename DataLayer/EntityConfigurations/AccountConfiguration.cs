@@ -22,7 +22,7 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
                 FirstName = "adminFirstName",
                 LastName = "adminLastName",
                 Email = "admin@simbirsoft.com",
-                Password = "qwerty123",
+                Password = "daaad6e5604e8e17bd9f108d91e26afe6281dac8fda0091040a7a6d7bd9b43b5",
                 Role = Role.ADMIN
             },
             new Account()
@@ -31,8 +31,8 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
                 FirstName = "chipperFirstName",
                 LastName = "chipperLastName",
                 Email = "chipper@simbirsoft.com",
-                Password = "qwerty123",
-                Role = Role.CHIPER
+                Password = "daaad6e5604e8e17bd9f108d91e26afe6281dac8fda0091040a7a6d7bd9b43b5",
+                Role = Role.CHIPPER
             },
             new Account()
             {
@@ -40,7 +40,7 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
                 FirstName = "userFirstName",
                 LastName = "userLastName",
                 Email = "user@simbirsoft.com",
-                Password = "qwerty123",
+                Password = "daaad6e5604e8e17bd9f108d91e26afe6281dac8fda0091040a7a6d7bd9b43b5",
                 Role = Role.USER
             });
     }
