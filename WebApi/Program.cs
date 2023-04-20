@@ -39,6 +39,12 @@ builder.Services.AddTransient<IAuthorizationService, AuthorizationService>();
 
 var app = builder.Build();
 
+using (IServiceScope provider = app.Services.CreateScope())
+{
+    ApplicationContext context = provider.ServiceProvider.GetRequiredService<ApplicationContext>();
+    context.Migrate();
+}
+
 if (app.Environment.IsProduction())
 {
     using (IServiceScope provider = app.Services.CreateScope())
