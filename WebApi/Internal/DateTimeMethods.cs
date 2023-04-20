@@ -21,8 +21,7 @@ public static class DateTimeMethods
         var now = DateTime.Now;
         return new DateTime(
             now.Year, now.Month, now.Day,
-            now.Hour, now.Minute, now.Second,
-            DateTimeKind.Local);
+            now.Hour, now.Minute, now.Second, DateTimeKind.Utc);
     }
 
     /// <summary>

@@ -18,7 +18,7 @@ public partial class AnimalsController  /* Types */
     }
 
     [HttpPost("types")]
-    [Authorize]
+    [Authorize("ADMIN", "CHIPPER")]
     public IActionResult TypesPost([FromBody] Dictionary<string, string?> body)
     {
         string? type;
@@ -39,7 +39,7 @@ public partial class AnimalsController  /* Types */
     }
 
     [HttpPut("types/{id?}")]
-    [Authorize]
+    [Authorize("ADMIN", "CHIPPER")]
     public IActionResult TypesPut(long? id, [FromBody] Dictionary<string, string?> body)
     {
         string? type;
@@ -63,7 +63,7 @@ public partial class AnimalsController  /* Types */
     }
 
     [HttpDelete("types/{id?}")]
-    [Authorize]
+    [Authorize("ADMIN")]
     public IActionResult TypesDelete(long? id)
     {
         if (id != null && id > 0)
@@ -84,15 +84,15 @@ public partial class AnimalsController  /* Types */
     }
 
     [HttpPost("{animalId}/types")]
-    [Authorize]
+    [Authorize("ADMIN", "CHIPPER")]
     public StatusCodeResult AnimalsTypesPost__condNullableTypeId() => StatusCode(400);  // typeId is null
     
     [HttpPost("types/{typeId}")]
-    [Authorize]
+    [Authorize("ADMIN", "CHIPPER")]
     public StatusCodeResult AnimalsTypesPost__condNullableAnimalId() => StatusCode(400); // animalId is null
 
     [HttpPost("{animalId}/types/{typeId}")]
-    [Authorize]
+    [Authorize("ADMIN", "CHIPPER")]
     public IActionResult AnimalTypesPost(long animalId, long typeId)
     {
         if (animalId <= 0 || typeId <= 0) return StatusCode(400);
@@ -116,7 +116,7 @@ public partial class AnimalsController  /* Types */
     }
 
     [HttpPut("{animalId?}/types")]
-    [Authorize]
+    [Authorize("ADMIN", "CHIPPER")]
     public IActionResult AnimalTypesPut(long? animalId, [FromBody] Dictionary<string, long?> body)
     {
         if (animalId == null || animalId <= 0 || body.Count < 2
@@ -148,11 +148,11 @@ public partial class AnimalsController  /* Types */
     }
 
     [HttpDelete("{animalId}/types")]
-    [Authorize]
+    [Authorize("ADMIN", "CHIPPER")]
     public StatusCodeResult AnimalTypesDelete__condNullableTypeId() => StatusCode(400);
 
     [HttpDelete("{animalId}/types/{typeId}")]
-    [Authorize]
+    [Authorize("ADMIN", "CHIPPER")]
     public IActionResult AnimalTypesDelete(long animalId, long typeId)
     {
         if (animalId <= 0 || typeId <= 0)

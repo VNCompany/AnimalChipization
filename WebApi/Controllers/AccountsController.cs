@@ -77,6 +77,7 @@ public class AccountsController : ApiController
         if (registeredAccount is null)
             return StatusCode(409);
 
+        Response.StatusCode = 201;
         return Json(registeredAccount);
     }
 
@@ -84,7 +85,7 @@ public class AccountsController : ApiController
     [Authorize]
     public IActionResult Put(int? id, [FromBody]AccountModelExtended model)
     {
-        if (id != null && id > 0 && model.Validate())
+        if (id is > 0 && model.Validate())
         {
             Account? account;
             if (Account!.Role == Role.ADMIN)
@@ -125,7 +126,7 @@ public class AccountsController : ApiController
             
             if (account != null)
             {
-                context.Accounts.Remove(Account);
+                context.Accounts.Remove(account);
                 context.SaveChanges();
                 return StatusCode(200);
             }

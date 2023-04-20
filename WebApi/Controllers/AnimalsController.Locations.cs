@@ -30,16 +30,16 @@ public partial class AnimalsController  /* Locations */
         if (endDateTimeParams.Status == DateTimeValidationStatus.Success)
             visitedLocations = visitedLocations.Where(vlo => vlo.DateTimeOfVisitLocationPoint <= endDateTimeParams.Value);
 
-        return Json(visitedLocations.OrderBy(vlo => vlo.DateTimeOfVisitLocationPoint).Skip(from).Take(size));
+        return Json(visitedLocations.Skip(from).Take(size));
     }
 
 
     [HttpPost("locations/{pointId?}")]
-    [Authorize]
+    [Authorize("ADMIN", "CHIPPER")]
     public StatusCodeResult LocationsPost__condNullable() => StatusCode(400);
 
     [HttpPost("{animalId}/locations/{pointId?}")]
-    [Authorize]
+    [Authorize("ADMIN", "CHIPPER")]
     public IActionResult LocationsPost(long animalId, long? pointId)
     {
         if (animalId <= 0 || pointId == null || pointId <= 0)
@@ -73,11 +73,11 @@ public partial class AnimalsController  /* Locations */
 
 
     [HttpPut("locations")]
-    [Authorize]
+    [Authorize("ADMIN", "CHIPPER")]
     public StatusCodeResult LocationsPut__condNullableAnimalId() => StatusCode(400);
 
     [HttpPut("{animalId}/locations")]
-    [Authorize]
+    [Authorize("ADMIN", "CHIPPER")]
     public IActionResult LocationsPut(long animalId, [FromBody] Dictionary<string, long?> body)
     {
         if (animalId <= 0
@@ -117,11 +117,11 @@ public partial class AnimalsController  /* Locations */
 
 
     [HttpDelete("locations/{visitedPointId?}")]
-    [Authorize]
+    [Authorize("ADMIN")]
     public StatusCodeResult LocationsDelete__condNullable() => StatusCode(400);
 
     [HttpDelete("{animalId}/locations/{visitedPointId?}")]
-    [Authorize]
+    [Authorize("ADMIN")]
     public IActionResult LocationsDelete(long animalId, long? visitedPointId)
     {
         if (animalId <= 0 || visitedPointId == null || visitedPointId <= 0)
@@ -136,8 +136,8 @@ public partial class AnimalsController  /* Locations */
                 context.VisitedLocations.Remove(vm.VisitedLocations[visitedLocationIndex]);
                 if (vm.VisitedLocations.Count > 1
                     && visitedLocationIndex == 0 
-                    && vm.VisitedLocations[visitedLocationIndex + 1].LocationPointId == vm.Animal.ChippingLocationId)
-                    context.VisitedLocations.Remove(vm.VisitedLocations[visitedLocationIndex + 1]);
+                    && vm.VisitedLocations[1].LocationPointId == vm.Animal.ChippingLocationId)
+                    context.VisitedLocations.Remove(vm.VisitedLocations[1]);
 
                 context.SaveChanges();
                 return StatusCode(200);

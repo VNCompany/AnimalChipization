@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решен
 		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpMath2", "SharpMath2\SharpMath2.csproj", "{38BA5288-7F80-4931-97E2-9EA9E6664347}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{C65F1153-1761-4512-B834-B062C6B85B20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C65F1153-1761-4512-B834-B062C6B85B20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C65F1153-1761-4512-B834-B062C6B85B20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38BA5288-7F80-4931-97E2-9EA9E6664347}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38BA5288-7F80-4931-97E2-9EA9E6664347}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38BA5288-7F80-4931-97E2-9EA9E6664347}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38BA5288-7F80-4931-97E2-9EA9E6664347}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

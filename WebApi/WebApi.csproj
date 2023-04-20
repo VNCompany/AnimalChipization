@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataLayer\DataLayer.csproj" />
+    <ProjectReference Include="..\SharpMath2\SharpMath2.csproj" />
   </ItemGroup>
 
   <ItemGroup>

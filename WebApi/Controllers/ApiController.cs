@@ -22,12 +22,9 @@ public class ApiController : Controller
         {
             if (!Authorize(controller.HttpContext))
                 context.Result = StatusCode(401);
-
-            if (authorizeAttr is { RequiredRoles.Length: > 0 } 
-                && !authorizeAttr.RequiredRoles.Contains(Account!.Role.ToString()))
+            else if (authorizeAttr is { RequiredRoles.Length: > 0 } 
+                     && !authorizeAttr.RequiredRoles.Contains(Account!.Role.ToString())) 
                 context.Result = StatusCode(403);
-
-
         }
 
         base.OnActionExecuting(context);

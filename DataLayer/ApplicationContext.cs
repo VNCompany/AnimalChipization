@@ -13,6 +13,7 @@ public class ApplicationContext : DbContext
     public DbSet<AnimalType> AnimalTypes { get; set; } = null!;
     public DbSet<AnimalsTypesLink> AnimalsTypesLinks { get; set; } = null!;
     public DbSet<VisitedLocation> VisitedLocations { get; set; } = null!;
+    public DbSet<Area> Areas { get; set; } = null!;
 
     public ApplicationContext(string connectionString)
     {

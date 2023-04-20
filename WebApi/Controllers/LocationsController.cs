@@ -15,7 +15,7 @@ public class LocationsController : ApiController
     [HttpGet("{id?}")]
     public IActionResult Get(long? id)
     {
-        if (id == null || id <= 0)
+        if (id is null or <= 0)
             return StatusCode(400);
 
         LocationPoint? lp = context.LocationPoints.FirstOrDefault(p => p.Id == id);
@@ -26,12 +26,13 @@ public class LocationsController : ApiController
     }
 
     [HttpPost]
-    [Authorize]
+    [Authorize("ADMIN", "CHIPPER")]
     public IActionResult Post([FromBody] LocationModel locationModel)
     {
         if (locationModel.Validate())
         {
-            if (context.LocationPoints.Count(lp => lp.Latitude == locationModel.Latitude && lp.Longitude == locationModel.Longitude) == 0)
+            if (context.LocationPoints.Count(lp => lp.Latitude == locationModel.Latitude 
+                                                   && lp.Longitude == locationModel.Longitude) == 0)
             {
                 LocationPoint entity = locationModel.ToEntity(new LocationPoint());
                 context.LocationPoints.Add(entity);
@@ -45,7 +46,7 @@ public class LocationsController : ApiController
     }
 
     [HttpPut("{id?}")]
-    [Authorize]
+    [Authorize("ADMIN", "CHIPPER")]
     public IActionResult Put(long? id, [FromBody] LocationModel locationModel)
     {
         if (id != null && id > 0 && locationModel.Validate())
@@ -53,7 +54,8 @@ public class LocationsController : ApiController
             LocationPoint? entity = context.LocationPoints.FirstOrDefault(lp => lp.Id == id);
             if (entity != null)
             {
-                if (context.LocationPoints.Count(lp => lp.Latitude == locationModel.Latitude && lp.Longitude == locationModel.Longitude) == 0)
+                if (context.LocationPoints.Count(lp => lp.Latitude == locationModel.Latitude 
+                                                       && lp.Longitude == locationModel.Longitude) == 0)
                 {
                     locationModel.ToEntity(entity);
                     context.SaveChanges();
@@ -67,7 +69,7 @@ public class LocationsController : ApiController
     }
 
     [HttpDelete("{id?}")]
-    [Authorize]
+    [Authorize("ADMIN")]
     public IActionResult Delete(long? id)
     {
         if (id != null && id > 0)
@@ -80,6 +82,7 @@ public class LocationsController : ApiController
                 {
                     context.LocationPoints.Remove(entity);
                     context.SaveChanges();
+                    Response.StatusCode = 201;
                     return StatusCode(200);
                 }
             }

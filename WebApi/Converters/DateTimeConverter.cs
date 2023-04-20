@@ -18,7 +18,7 @@ internal static class __DateTimeConverterMethods
             return new DateTime(
                 dateTime.Year, dateTime.Month, dateTime.Day,
                 dateTime.Hour, dateTime.Minute, dateTime.Second,
-                DateTimeKind.Local);
+                DateTimeKind.Utc);
         return null;
     }
 

@@ -85,7 +85,7 @@ public partial class AnimalsController : ApiController
     }
 
     [HttpPost]
-    [Authorize]
+    [Authorize("ADMIN", "CHIPPER")]
     public IActionResult Post([FromBody]AnimalPostModel model)
     {
         if (model.Validate())
@@ -126,7 +126,7 @@ public partial class AnimalsController : ApiController
     }
 
     [HttpPut("{id?}")]
-    [Authorize]
+    [Authorize("ADMIN", "CHIPPER")]
     public IActionResult Put(long? id, [FromBody]AnimalPutModel model)
     {
         if (id != null && id > 0 && model.Validate())
@@ -154,7 +154,7 @@ public partial class AnimalsController : ApiController
     }
 
     [HttpDelete("{id?}")]
-    [Authorize]
+    [Authorize("ADMIN")]
     public IActionResult Delete(long? id)
     {
         if (id != null && id > 0)
